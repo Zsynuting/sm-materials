@@ -1,12 +1,14 @@
 import './style.scss'
 import React, { createElement, useRef, useEffect, useState } from 'react'
 import { Table as OriginalTable, Empty } from 'antd'
+import { useAntdColumnResize } from 'react-antd-column-resize';
 import { ColumnsType } from 'antd/lib/table'
 import { isNil } from 'lodash'
 import Sortable from 'sortablejs'
 import useTableColumns, {
   getTableColumnOrderStorageId,
   ICustomTableProps,
+  ICustomColumnType,
   useColumnsOrder,
 } from './useTableColumns'
 import resetChildrenName from './resetDefaultChildrenName'
@@ -66,10 +68,20 @@ const SMTable = (props: ICustomTableProps<any>) => {
     id,
     columnsDraggable,
     recordColumnsOrder,
+    onColumnsResize,
     ...restProps
   } = newProps
   const locale = useTableLocale(emptyText)
   const tableRef = useRef(null)
+  const { resizableColumns, components, tableWidth, resetColumns } =
+  useAntdColumnResize(() => {
+    return { columns, minWidth: 100 };
+  }, []);
+
+  useEffect(() => {
+    console.log('columns',resizableColumns)
+    onColumnsResize(resizableColumns as ICustomColumnType<any>[])
+  })
 
   useEffect(() => {
     tableRef?.current.scrollTo({ index: scrollTo })
@@ -113,7 +125,7 @@ const SMTable = (props: ICustomTableProps<any>) => {
 
   const newRestProps = resetChildrenName(restProps)
   return (
-    <OriginalTable id={id} {...newRestProps} columns={columns} ref={tableRef} locale={locale} />
+    <OriginalTable id={id} {...newRestProps}columns={resizableColumns} ref={tableRef} locale={locale} components={components} scroll={{ x: tableWidth }} />
   )
 }
 

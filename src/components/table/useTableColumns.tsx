@@ -18,7 +18,7 @@ export interface ICustomTableProps<T> extends TableProps<T> {
   onColumnsSort?: (columns: ColumnsType<any>[]) => void
   id?: string
   recordColumnsOrder?: boolean
-  onColumnsResize?: (columnWidths: Record<string, number>) => void
+  onColumnsResize?: (columnWidths: ICustomColumnType<any>[]) => void
 }
 
 export const getTableColumnOrderStorageId = (id: string) => `${id}_columns_order`
@@ -227,32 +227,33 @@ const useTableColumns = (
       .concat(groups)
   }, [headerGroups, columnList, mapOnCellForColumnFn])
 
-  const resizableColumns = React.useMemo(
-    () =>
-      columns.map((column) => ({
-        ...column,
-        width: columnWidthMap[column.dataIndex as string]
-          ? `${columnWidthMap[column.dataIndex as string]}px`
-          : column.width,
-        title: column.dataIndex ? (
-          <>
-            {column.title}
-            <ColumnResizer
-              onResize={(width) => {
-                const widthMap = { ...columnWidthMap, [column.dataIndex as string]: width }
-                props.onColumnsResize?.(widthMap)
-                setColumnWidthMap(widthMap)
-              }}
-            />
-          </>
-        ) : (
-          column.title
-        ),
-      })),
-    [columns, columnWidthMap],
-  )
+  // const resizableColumns = React.useMemo(
+  //   () =>
+  //     columns.map((column) => ({
+  //       ...column,
+  //       width: columnWidthMap[column.dataIndex as string]
+  //         ? `${columnWidthMap[column.dataIndex as string]}px`
+  //         : column.width,
+  //       title: column.dataIndex ? (
+  //         <>
+  //           {column.title}
+  //           <ColumnResizer
+  //             onResize={(width) => {
+  //               const widthMap = { ...columnWidthMap, [column.dataIndex as string]: width }
+  //               props.onColumnsResize?.(widthMap)
+  //               setColumnWidthMap(widthMap)
+  //             }}
+  //           />
+  //         </>
+  //       ) : (
+  //         column.title
+  //       ),
+  //     })),
+  //   [columns, columnWidthMap],
+  // )
 
-  return resizableColumns as any
+  // return resizableColumns as any
+  return columns as any
 }
 
 export default useTableColumns
