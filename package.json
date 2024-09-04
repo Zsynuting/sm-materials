@@ -58,6 +58,7 @@
     "@ant-design/pro-components": "^2.6.43",
     "@redhare/lowcode-types": "^1.0.5",
     "antd": "^4.24.14",
+    "react-antd-column-resize": "^1.0.3",
     "sortablejs": "^1.15.2"
   },
   "acceptDependencies": {
